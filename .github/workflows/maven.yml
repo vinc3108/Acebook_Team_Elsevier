@@ -51,9 +51,9 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: |
           aws deploy create-deployment \
-          --application-name acebook \
+          --application-name Acebook-elsevierGroup \
           --deployment-config-name CodeDeployDefault.OneAtATime \
           --deployment-group-name production \
-          --region us-east-2 \
+          --region eu-west-2 \
           --file-exists-behavior OVERWRITE \
-          --s3-location "bucket=continuously-eddie, bundleType=zip, key=acebook-${{ github.sha }}.zip"
+          --s3-location "bucket=acebook-java, bundleType=zip, key=acebookElsevier-${{ github.sha }}.zip"
