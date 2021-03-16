@@ -22,3 +22,26 @@ jobs:
       run: mvn -B package --file pom.xml
     - name: Run Tests
       run: mvn test
+  
+  deploy:
+    needs: [build]
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [15.x]
+    steps:
+      - uses: actions/checkout@v2
+      - run: npm install
+      - name: AWS Deploy push
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: |
+          aws deploy push \
+          --application-name Acebook-elsevierGroup  \
+          --description "This is a revision for the acebookElsevier-${{ github.sha }}" \
+          --region eu-west-2 \
+          --ignore-hidden-files \
+          --s3-location s3://acebook-java/acebookElsevier-${{ github.sha }}.zip \
+          --source .
+
