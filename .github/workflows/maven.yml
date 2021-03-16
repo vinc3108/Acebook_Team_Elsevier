@@ -45,3 +45,15 @@ jobs:
           --s3-location s3://acebook-java/acebookElsevier-${{ github.sha }}.zip \
           --source .
 
+      - name: CodeDeploy
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: |
+          aws deploy create-deployment \
+          --application-name acebook \
+          --deployment-config-name CodeDeployDefault.OneAtATime \
+          --deployment-group-name production \
+          --region us-east-2 \
+          --file-exists-behavior OVERWRITE \
+          --s3-location "bucket=continuously-eddie, bundleType=zip, key=acebook-${{ github.sha }}.zip"
